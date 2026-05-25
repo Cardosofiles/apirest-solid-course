@@ -1,7 +1,9 @@
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 
+import { prisma } from '@/db/prisma.js';
 import Fastify from 'fastify';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
+import z from 'zod';
 
 export async function buildApp() {
   // ─── Fastify Instance ─────────────────────────────────────────────────────
@@ -28,6 +30,26 @@ export async function buildApp() {
   // ─── Plugins ──────────────────────────────────────────────────────────────
 
   // ─── Rotas ────────────────────────────────────────────────────────────────
+
+  app.post('/users', async (request, reply) => {
+    const registerBodySchema = z.object({
+      name: z.string(),
+      email: z.email(),
+      password: z.string().min(6),
+    });
+
+    const { name, email, password } = registerBodySchema.parse(request.body);
+
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+        password_hash: password,
+      },
+    });
+
+    return reply.status(201).send({ message: 'User created successfully' });
+  });
 
   return app;
 }
