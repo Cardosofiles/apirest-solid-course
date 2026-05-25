@@ -3,6 +3,7 @@ import { type FastifyReply, type FastifyRequest } from 'fastify';
 import z from 'zod';
 
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository.js';
+import { UserAlreadyExistsError } from '@/use-cases/errors/user-already-exists-error.js';
 import { RegisterUseCase } from '@/use-cases/register.js';
 
 export async function registerController(request: FastifyRequest, reply: FastifyReply) {
@@ -19,9 +20,13 @@ export async function registerController(request: FastifyRequest, reply: Fastify
     const registerUseCase = new RegisterUseCase(userRepository);
 
     await registerUseCase.execute({ name, email, password });
-  } catch (e) {
-    return reply.status(409).send({ message: 'Email already in use' });
+  } catch (err) {
+    if (err instanceof UserAlreadyExistsError) {
+      return reply.status(409).send({ message: err.message });
+    }
+
+    throw err;
   }
 
-  return reply.status(201).send({ message: 'User created successfully' });
+  return reply.status(201).send({ message: 'Usuário criado com sucesso!' });
 }
