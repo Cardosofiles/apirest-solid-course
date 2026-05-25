@@ -31,6 +31,8 @@ export default defineConfig([
       // Evita any solto, mas avisa em vez de bloquear
       '@typescript-eslint/no-explicit-any': 'warn',
 
+      'no-useless-constructor': 'off',
+
       // Variáveis não usadas — ignora params com prefixo _
       '@typescript-eslint/no-unused-vars': [
         'error',
