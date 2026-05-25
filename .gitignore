@@ -1,0 +1,7 @@
+node_modules
+dist
+.env
+build
+src/generated
+
+/src/generated/prisma
