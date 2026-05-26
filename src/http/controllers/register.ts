@@ -1,18 +1,11 @@
 import { type FastifyReply, type FastifyRequest } from 'fastify';
 
-import z from 'zod';
-
+import { registerBodySchema } from '@/http/schemas/register-body-schema.js';
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository.js';
 import { UserAlreadyExistsError } from '@/use-cases/errors/user-already-exists-error.js';
 import { RegisterUseCase } from '@/use-cases/register.js';
 
 export async function registerController(request: FastifyRequest, reply: FastifyReply) {
-  const registerBodySchema = z.object({
-    name: z.string(),
-    email: z.email(),
-    password: z.string().min(6),
-  });
-
   const { name, email, password } = registerBodySchema.parse(request.body);
 
   try {
