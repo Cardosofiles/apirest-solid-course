@@ -1,15 +1,20 @@
 import { hash } from 'bcryptjs';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import { InMemoryUsersRepository } from '@/repositories/prisma/in-memory/in-memory-users-repository.js';
 import { AuthenticateUseCase } from '@/use-cases/authenticate.js';
 import { InvalidCredentialsError } from '@/use-cases/errors/invalid-credential-erro.js';
 
-describe('Authenticate Use Case', () => {
-  it('should be able to authenticate', async () => {
-    const inMemoryUsersRepository = new InMemoryUsersRepository();
-    const sut = new AuthenticateUseCase(inMemoryUsersRepository);
+let inMemoryUsersRepository: InMemoryUsersRepository;
+let sut: AuthenticateUseCase;
 
+describe('Authenticate Use Case', () => {
+  beforeEach(() => {
+    inMemoryUsersRepository = new InMemoryUsersRepository();
+    sut = new AuthenticateUseCase(inMemoryUsersRepository);
+  });
+
+  it('should be able to authenticate', async () => {
     await inMemoryUsersRepository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',
@@ -27,9 +32,6 @@ describe('Authenticate Use Case', () => {
   });
 
   it('should not be able to authenticate with wrong email', async () => {
-    const inMemoryUsersRepository = new InMemoryUsersRepository();
-    const sut = new AuthenticateUseCase(inMemoryUsersRepository);
-
     expect(() =>
       sut.execute({
         email: 'johndoe@example.com',
@@ -38,10 +40,7 @@ describe('Authenticate Use Case', () => {
     ).rejects.toBeInstanceOf(InvalidCredentialsError);
   });
 
-  it('should not be able to authenticate with wrong email', async () => {
-    const inMemoryUsersRepository = new InMemoryUsersRepository();
-    const sut = new AuthenticateUseCase(inMemoryUsersRepository);
-
+  it('should not be able to authenticate with wrong password', async () => {
     await inMemoryUsersRepository.create({
       name: 'John Doe',
       email: 'johndoe@example.com',
