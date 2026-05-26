@@ -1,7 +1,7 @@
 import { hash } from 'bcryptjs';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { InMemoryUsersRepository } from '@/repositories/prisma/in-memory/in-memory-users-repository.js';
+import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository.js';
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error.js';
 import { GetUserProfileUseCase } from '@/use-cases/get-user-profile.js';
 

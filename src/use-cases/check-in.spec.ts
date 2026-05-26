@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { InMemoryCheckInsRepository } from '@/repositories/prisma/in-memory/in-memory-check-ins-repository.js';
+import { InMemoryCheckInsRepository } from '@/repositories/in-memory/in-memory-check-ins-repository.js';
 import { CheckInUseCase } from '@/use-cases/check-in.js';
 
 let inMemoryCheckInsRepository: InMemoryCheckInsRepository;
