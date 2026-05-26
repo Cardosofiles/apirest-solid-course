@@ -1,7 +1,7 @@
 import { compare } from 'bcryptjs';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { InMemoryUsersRepository } from '@/repositories/prisma/in-memory/in-memory-users-repository.js';
+import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository.js';
 import { UserAlreadyExistsError } from '@/use-cases/errors/user-already-exists-error.js';
 import { RegisterUseCase } from '@/use-cases/register.js';
 
