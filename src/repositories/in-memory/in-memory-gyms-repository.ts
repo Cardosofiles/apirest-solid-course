@@ -2,7 +2,9 @@ import { Decimal } from '@prisma/client/runtime/client';
 import { randomUUID } from 'node:crypto';
 
 import type { Gym, Prisma } from '@/generated/prisma/client.js';
-import type { GymsRepository } from '@/repositories/gyms-repository.js';
+import type { FindManyNearbyParams, GymsRepository } from '@/repositories/gyms-repository.js';
+
+import { getDistanceBetweenCoordinates } from '@/utils/get-distance-between-coordinates.js';
 
 export class InMemoryGymsRepository implements GymsRepository {
   public items: Gym[] = [];
@@ -32,5 +34,19 @@ export class InMemoryGymsRepository implements GymsRepository {
   async findById(id: string): Promise<Gym | null> {
     const gym = this.items.find((item) => item.id === id);
     return gym || null;
+  }
+
+  async findManyNearby(params: FindManyNearbyParams) {
+    return this.items.filter((item) => {
+      const distance = getDistanceBetweenCoordinates(
+        { latitude: params.latitude, longitude: params.longitude },
+        {
+          latitude: item.latitude.toNumber(),
+          longitude: item.longitude.toNumber(),
+        },
+      );
+
+      return distance < 10;
+    });
   }
 }
