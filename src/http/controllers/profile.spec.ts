@@ -4,7 +4,7 @@ import { buildApp } from '@/app.js';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-describe('AuthenticateController (e2e)', () => {
+describe('ProfileController (e2e)', () => {
   let app: Awaited<ReturnType<typeof buildApp>>;
 
   beforeAll(async () => {
@@ -16,7 +16,7 @@ describe('AuthenticateController (e2e)', () => {
     await app.close();
   });
 
-  it('should authenticate an existing user', async () => {
+  it('should be able to get profile information for an authenticated user', async () => {
     const email = `${randomUUID()}@example.com`;
 
     await request(app.server).post('/users').send({
@@ -25,14 +25,25 @@ describe('AuthenticateController (e2e)', () => {
       password: 'password123',
     });
 
-    const response = await request(app.server).post('/sessions').send({
+    const authResponse = await request(app.server).post('/sessions').send({
       email,
       password: 'password123',
     });
 
-    expect(response.status).toEqual(200);
-    expect(response.body).toEqual({
-      token: expect.any(String),
-    });
+    const { token } = authResponse.body;
+
+    const profileResponse = await request(app.server)
+      .get('/me')
+      .set('Authorization', `Bearer ${token}`)
+      .send();
+
+    expect(profileResponse.status).toEqual(200);
+    expect(profileResponse.body).toEqual(
+      expect.objectContaining({
+        user: expect.objectContaining({
+          email,
+        }),
+      }),
+    );
   });
 });
