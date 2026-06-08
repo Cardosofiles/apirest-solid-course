@@ -4,12 +4,12 @@ import { searchGymsQuerySchema } from '@/http/controllers/gyms/schemas/search-qu
 import { makeSearchGymsUseCase } from '@/use-cases/factories/make-search-gyms-use-case.js';
 
 export async function search(request: FastifyRequest, reply: FastifyReply) {
-  const { queryParams, page } = searchGymsQuerySchema.parse(request.query);
+  const { q, page } = searchGymsQuerySchema.parse(request.query);
 
   const searchGymsUseCase = makeSearchGymsUseCase();
 
   const { gyms } = await searchGymsUseCase.execute({
-    query: queryParams,
+    query: q,
     page,
   });
 
