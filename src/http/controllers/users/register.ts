@@ -1,6 +1,6 @@
 import { type FastifyReply, type FastifyRequest } from 'fastify';
 
-import { registerBodySchema } from '@/http/schemas/register-body-schema.js';
+import { registerBodySchema } from '@/http/controllers/users/schemas/register-body-schema.js';
 import { UserAlreadyExistsError } from '@/use-cases/errors/user-already-exists-error.js';
 import { makeRegisterUseCase } from '@/use-cases/factories/make-register-use-case.js';
 

@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 
-import { authenticateBodySchema } from '@/http/schemas/authenticate-body-schema.js';
+import { authenticateBodySchema } from '@/http/controllers/users/schemas/authenticate-body-schema.js';
 import { InvalidCredentialsError } from '@/use-cases/errors/invalid-credential-erro.js';
 import { makeAuthenticateUseCase } from '@/use-cases/factories/make-authenticate-use-case.js';
 
