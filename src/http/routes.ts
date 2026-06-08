@@ -3,6 +3,7 @@ import type { FastifyInstance } from 'fastify';
 import { authenticateController } from '@/http/controllers/authenticate.js';
 import { profile } from '@/http/controllers/profile.js';
 import { registerController } from '@/http/controllers/register.js';
+import { verifyJwt } from '@/http/middlewares/verify-jwt.js';
 
 export async function appRoutes(app: FastifyInstance) {
   /** Public routes */
@@ -10,5 +11,5 @@ export async function appRoutes(app: FastifyInstance) {
   app.post('/sessions', authenticateController);
 
   /** Authenticated routes */
-  app.get('/me', profile);
+  app.get('/me', { onRequest: [verifyJwt] }, profile);
 }
