@@ -1,5 +1,6 @@
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 
+import fastifyCookie from '@fastify/cookie';
 import fastifyJwt from '@fastify/jwt';
 import Fastify from 'fastify';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
@@ -35,7 +36,12 @@ export async function buildApp() {
   // ─── Plugins ──────────────────────────────────────────────────────────────
   app.register(fastifyJwt, {
     secret: env.JWT_SECRET,
+    sign: {
+      expiresIn: '10m',
+    },
   });
+
+  app.register(fastifyCookie);
 
   // ─── Rotas ────────────────────────────────────────────────────────────────
   app.register(usersRoutes);
