@@ -32,5 +32,5 @@ jobs:
 
       - run: pnpm run test:e2e
         env:
-          JWT_SECRET: testing
+          JWT_SECRET: DFn5Xf9AbW/vfRtlV0l/tu3DVx0Iq0WiBZY6Dr8HUFg=
           DATABASE_URL: 'postgresql://docker:docker@localhost:5432/apisolid?schema=public'
