@@ -1,11 +1,12 @@
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 
+import fastifyJwt from '@fastify/jwt';
 import Fastify from 'fastify';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
+import z, { ZodError } from 'zod';
 
 import { env } from '@/config/env.js';
 import { appRoutes } from '@/http/routes.js';
-import z, { ZodError } from 'zod';
 
 export async function buildApp() {
   // ─── Fastify Instance ─────────────────────────────────────────────────────
@@ -30,6 +31,9 @@ export async function buildApp() {
   app.setSerializerCompiler(serializerCompiler);
 
   // ─── Plugins ──────────────────────────────────────────────────────────────
+  app.register(fastifyJwt, {
+    secret: env.JWT_SECRET,
+  });
 
   // ─── Rotas ────────────────────────────────────────────────────────────────
   app.register(appRoutes);
