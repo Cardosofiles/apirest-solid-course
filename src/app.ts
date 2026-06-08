@@ -6,6 +6,7 @@ import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod
 import z, { ZodError } from 'zod';
 
 import { env } from '@/config/env.js';
+import { checkInsRoutes } from '@/http/controllers/check-ins/routes.js';
 import { gymsRoutes } from '@/http/controllers/gyms/routes.js';
 import { usersRoutes } from '@/http/controllers/users/routes.js';
 
@@ -39,6 +40,7 @@ export async function buildApp() {
   // ─── Rotas ────────────────────────────────────────────────────────────────
   app.register(usersRoutes);
   app.register(gymsRoutes);
+  app.register(checkInsRoutes);
 
   // ─── Erros Handler ────────────────────────────────────────────────────────
   app.setErrorHandler(async (error, _request, reply) => {
